@@ -11,12 +11,14 @@ class OxidizedCollector(object):
         self.oxidized_url = oxidized_url
 
     def collect(self):
-        response = requests.get(self.oxidized_url + "/nodes.json").json()
         metric = Metric('oxidized_status', 'Most recent oxidized status', 'gauge')
-        for node in response:
-            status = 1 if node['status'] == 'success' else 0
-            metric.add_sample('oxidized_status', value=status, labels={'instance': node['name']})
-            print("request!")
+        urls = self.oxidized_url.split(',')
+        for url in urls:
+            response = requests.get(url + "/nodes.json").json()
+            for node in response:
+                status = 1 if node['status'] == 'success' else 0
+                metric.add_sample('oxidized_status', value=status, labels={'instance': node['name']})
+                print("request!")
 
         yield metric
 
@@ -29,4 +31,3 @@ if __name__ == "__main__":
 
     while True:
         time.sleep(1)
-

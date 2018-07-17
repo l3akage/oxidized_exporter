@@ -1,2 +1,3 @@
 [default]
 url = https://oxidized.domain.net
+;url = https://oxidized1.domain.net,https://oxidized2.domain.net
